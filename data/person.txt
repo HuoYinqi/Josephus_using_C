@@ -1,0 +1,7 @@
+Bob,15
+Jack,12
+Allen,17
+Tony,20
+Peter,15
+Rose,16
+Wade,19
