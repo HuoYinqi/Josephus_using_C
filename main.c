@@ -1,7 +1,8 @@
 #include <stdio.h>
+
 #include "josephus.h"
 #include "read_file.h"
-// #include "person.h"
+#include "person.h"
 
 int main()
 {
