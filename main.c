@@ -19,8 +19,8 @@ int main()
     step = 2;
     Josephus jos = create_josephus(start, step, line);
     put_people_in_josephus(&jos, people);
-    josephus_pop(&jos, 2);
-    josephus_append(&jos, p1);
+    // josephus_pop(&jos, 2);
+    // josephus_append(&jos, p1);
     Person *result = get_result(&jos);
     printf("----------------\n");
     for (int i = 0; i < jos.number; i++)
