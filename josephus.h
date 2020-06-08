@@ -17,5 +17,8 @@ void put_people_in_josephus(Josephus*, Person*);
 
 Person* get_result(Josephus*);
 
+void josephus_append(Josephus*, Person);
+
+void josephus_pop(Josephus*, int index);
 
 #endif

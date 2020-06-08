@@ -50,3 +50,39 @@ Person *get_result(Josephus *self)
     free(self->people);
     return result;
 }
+
+void josephus_append(Josephus* self, Person someone)
+{
+    Person *new_people = malloc(sizeof(Person) * (self->number + 1));
+    for(int i = 0; i < self->number; i++)
+    {
+        new_people[i] = self->people[i];
+    }
+    free(self->people);
+    new_people[self->number] = someone;
+    self->people = new_people;
+    self->number ++;
+}
+
+void josephus_pop(Josephus* self, int index)
+{
+    if(index >= self->number || index < 0)
+    {
+        return;
+    }
+
+    Person *new_people = malloc(sizeof(Person) * (self->number - 1));
+    for(int i = 0; i < index; i++)
+    {
+        new_people[i] = self->people[i];
+    }
+
+    for (int i = index; i < self->number - 1; i++)
+    {
+        new_people[i] = self->people[i + 1];
+    }
+
+    free(self->people);
+    self->people = new_people;
+    self->number --;
+}
