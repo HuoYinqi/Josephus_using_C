@@ -1,5 +1,5 @@
-#ifndef __josephus_h__
-#define __josephus_h__
+#ifndef JOSEPHUS_H
+#define JOSEPHUS_H
 
 #include "person.h"
 

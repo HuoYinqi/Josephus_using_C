@@ -1,5 +1,5 @@
-#ifndef __read_file_h__
-#define __read_file_h__
+#ifndef READ_FILE_H
+#define READ_FILE_H
 
 #include "person.h"
 
