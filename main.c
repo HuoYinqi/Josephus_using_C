@@ -1,14 +1,14 @@
 #include <stdio.h>
 
-#include "josephus.h"
-#include "read_file.h"
-#include "person.h"
+#include "src/josephus.h"
+#include "src/read_file.h"
+#include "src/person.h"
 
 int main()
 {
     int line;
     int start, step;
-    Person *people = create_people_from_file("data\\person.txt", &line);
+    Person *people = create_people_from_file("data/person.txt", &line);
     printf("people list from file:\n");
     for(int i = 0; i < line; i++)
     {
