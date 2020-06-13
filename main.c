@@ -1,32 +1,37 @@
 #include <stdio.h>
+#include <stdlib.h>
 
+#include "src/person.h"
 #include "src/josephus.h"
 #include "src/read_file.h"
-#include "src/person.h"
 
 int main()
 {
-    int line;
-    int start, step;
-    Person *people = create_people_from_file("data/person.txt", &line);
-    printf("people list from file:\n");
-    for(int i = 0; i < line; i++)
+    Josephus jos;
+    Person people[10];
+    Person result[10];
+    int line = 0;
+    for(int i = 0; i < 10; i++)
     {
-        printf("%s\n", get_person_info(people[i]));
+        person_new(people + i);
     }
-    Person p1 = {"New", 10};
-    start = 1;
-    step = 2;
-    Josephus jos = create_josephus(start, step, line);
-    put_people_in_josephus(&jos, people);
-    // josephus_pop(&jos, 2);
-    // josephus_append(&jos, p1);
-    Person *result = get_result(&jos);
-    printf("----------------\n");
-    for (int i = 0; i < jos.number; i++)
+    create_people_from_file("data/person.txt", &line, people);
+    josephus_new(&jos, 1, 2, 7);
+    josephus_put_people(&jos, people);
+    josephus_get_result(&jos, result);
+    for(int i = 0; i < jos.number; i++)
     {
-        printf("%s\n", get_person_info(result[i]));
+        char info[100];
+        person_get_info(result + i, info);
+        printf("%s\n", info);
     }
+    
+    for(int i = 0; i < 10; i++)
+    {
+        person_destroy(people + i);
+    }
+    josephus_destroy(&jos);
 
     return 0;
+
 }

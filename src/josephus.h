@@ -11,14 +11,16 @@ typedef struct Josephus
     Person *people;
 } Josephus;
 
-Josephus create_josephus(int start, int step, int number);
+int josephus_new(Josephus *self, int start, int step, int number);
 
-void put_people_in_josephus(Josephus*, Person*);
+void josephus_destroy(Josephus* self);
 
-Person* get_result(Josephus*);
+int josephus_put_people(Josephus *self, Person *people);
 
-void josephus_append(Josephus*, Person);
+int josephus_get_result(Josephus *self, Person *result);
 
-void josephus_pop(Josephus*, int index);
+int josephus_append(Josephus*, Person);
+
+int josephus_pop(Josephus*, int index);
 
 #endif

@@ -7,8 +7,14 @@ typedef struct person
     int age;
 }Person;
 
-char* get_person_info(Person);
+void person_new(Person*);
 
-Person str2person(char*);
+void person_destroy(Person*);
+
+int person_init(Person*, char *name, int age);
+
+int person_get_info(Person*, char *info);
+
+int person_create_from_string(char *s, Person*);
 
 #endif

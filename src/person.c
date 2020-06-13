@@ -4,23 +4,44 @@
 
 #include "person.h"
 
-char *get_person_info(Person someone)
+#define SUCCESS 1
+#define FALSE 0
+
+void person_new(Person* self)
 {
-    char *info = malloc(100);
-    char name[10];
-    strcpy(info, "name: ");
-    strcat(info, someone.name);
-    strcat(info, "\tage: ");
-    char age[10];
-    itoa(someone.age, age, 10);
-    strcat(info, age);
-    return info;
+    self->name = malloc(20);
 }
 
-Person str2person(char *s)
+void person_destroy(Person *self)
 {
-    Person someone;
-    char *name = malloc(10);
+    free(self->name);
+}
+
+int person_init(Person* self, char *name, int age)
+{
+    strcpy(self->name, name);
+    if(age < 1 || age > 100)
+    {   
+        return FALSE;
+    }
+    self->age = age;
+    return SUCCESS;
+}
+
+int person_get_info(Person *self, char *info)
+{
+    char name[10];
+    char age[10];
+    strcpy(info, "name: ");
+    strcat(info, self->name);
+    strcat(info, "\tage: ");
+    itoa(self->age, age, 10);
+    strcat(info, age);
+    return SUCCESS;
+}
+
+int person_create_from_string(char *s, Person *self)
+{
     char age[4];
     int split_index;
     for (int i = 0; i < strlen(s); i++)
@@ -32,19 +53,18 @@ Person str2person(char *s)
         }
         if (i == strlen(s))
         {
-            exit(1);
+            return FALSE;
         }
     }
     for (int i = 0; i < split_index; i++)
     {
-        name[i] = s[i];
+        self->name[i] = s[i];
     }
 
     for (int i = 0; i < strlen(s) - split_index - 1; i++)
     {
         age[i] = s[i + split_index + 1];
     }
-    someone.name = name;
-    sscanf(age, "%d", &someone.age);
-    return someone;
+    self->age = atoi(age);
+    return SUCCESS;
 }

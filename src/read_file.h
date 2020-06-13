@@ -3,6 +3,6 @@
 
 #include "person.h"
 
-Person *create_people_from_file(char* path, int* line);
+int create_people_from_file(char* path, int* line, Person *people);
 
 #endif

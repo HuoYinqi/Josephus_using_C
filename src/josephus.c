@@ -4,30 +4,61 @@
 #include "josephus.h"
 #include "person.h"
 
-Josephus create_josephus(int start, int step, int number)
+#define MAX 100
+#define SUCCESS 1
+#define FALSE 0
+#define INVALID_START -1
+#define INVALID_STEP -2
+#define INVALID_NUMBER -3
+
+int josephus_new(Josephus *self, int start, int step, int number)
 {
-    Josephus jos = {start, step, number};
-    jos.people = malloc(number * sizeof(Person));
-    return jos;
+    if(start < 1 || start > number)
+    {
+        return INVALID_START;
+    }
+    
+    else if (step < 1)
+    {
+        return INVALID_STEP; 
+    }
+
+    else if(number < 1 || number > MAX)
+    {
+        return INVALID_NUMBER;
+    }
+
+    self->start = start;
+    self->step = step;
+    self->number = number;
+    self->people = malloc(MAX * sizeof(Person));
+    
+    return SUCCESS;
 }
 
-void put_people_in_josephus(Josephus *self, Person *people)
+void josephus_destroy(Josephus* self)
+{
+    free(self->people);
+}
+
+int josephus_put_people(Josephus *self, Person *people)
 {
     for (int i = 0; i < (self->number); i++)
     {
         self->people[i] = people[i];
     }
+    return SUCCESS;
 }
 
-Person *get_result(Josephus *self)
+int josephus_get_result(Josephus *self, Person *result)
 {
     int size = self->number;
-    int nums[size];
-    Person *result = malloc(size * sizeof(Person));
+    int nums[MAX];
     for (int i = 0; i < size; i++)
     {
-        nums[i] = 1;
-    }
+        nums[i] = 1; 
+    }   
+
     int index = self->start - 1;
     for (int i = 0; i < size; i++)
     {
@@ -47,42 +78,31 @@ Person *get_result(Josephus *self)
         result[i] = self->people[current_id];
         index = (current_id + 1) % size;
     }
-    free(self->people);
-    return result;
+    return SUCCESS;
 }
 
-void josephus_append(Josephus* self, Person someone)
+int josephus_append(Josephus* self, Person someone)
 {
-    Person *new_people = malloc(sizeof(Person) * (self->number + 1));
-    for(int i = 0; i < self->number; i++)
+    if(self->number == MAX)
     {
-        new_people[i] = self->people[i];
+        return FALSE;
     }
-    free(self->people);
-    new_people[self->number] = someone;
-    self->people = new_people;
+    self->people[self->number] = someone;
     self->number ++;
+    return SUCCESS;
 }
 
-void josephus_pop(Josephus* self, int index)
+int josephus_pop(Josephus* self, int index)
 {
     if(index >= self->number || index < 0)
     {
-        return;
+        return FALSE;
     }
 
-    Person *new_people = malloc(sizeof(Person) * (self->number - 1));
-    for(int i = 0; i < index; i++)
+    for(int i = index; i < self->number - 1; i++)
     {
-        new_people[i] = self->people[i];
+        self->people[i] = self->people[i+1];
     }
-
-    for (int i = index; i < self->number - 1; i++)
-    {
-        new_people[i] = self->people[i + 1];
-    }
-
-    free(self->people);
-    self->people = new_people;
     self->number --;
+    return SUCCESS;
 }
