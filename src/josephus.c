@@ -11,9 +11,16 @@
 #define INVALID_STEP -2
 #define INVALID_NUMBER -3
 
-int josephus_new(Josephus *self, int start, int step, int number)
+struct Josephus
 {
-    if(start < 1 || start > number)
+    int start;
+    int step;
+    person_array_t people;
+};
+
+int josephus_new(Josephus self, int start, int step)
+{
+    if(start < 1)
     {
         return INVALID_START;
     }
@@ -23,36 +30,26 @@ int josephus_new(Josephus *self, int start, int step, int number)
         return INVALID_STEP; 
     }
 
-    else if(number < 1 || number > MAX)
-    {
-        return INVALID_NUMBER;
-    }
-
     self->start = start;
     self->step = step;
-    self->number = number;
-    self->people = malloc(MAX * sizeof(Person));
+    person_array_init(self->people);
     
     return SUCCESS;
 }
 
-void josephus_destroy(Josephus* self)
+void josephus_destroy(Josephus self)
 {
-    free(self->people);
-}
-
-int josephus_put_people(Josephus *self, Person *people)
-{
-    for (int i = 0; i < (self->number); i++)
+    person_array_clear(self->people);
+    for(int i = 0; i < josephus_size(self); i++)
     {
-        self->people[i] = people[i];
+        free(*(person_array_get_at(self->people, i)));
+        person_destroy(*(person_array_get_at(self->people, i)));
     }
-    return SUCCESS;
 }
 
-int josephus_get_result(Josephus *self, Person *result)
+int josephus_get_result(Josephus self, Person *result)
 {
-    int size = self->number;
+    int size = person_array_size(self->people);
     int nums[MAX];
     for (int i = 0; i < size; i++)
     {
@@ -64,7 +61,7 @@ int josephus_get_result(Josephus *self, Person *result)
     {
         int valid_step = 0;
         int current_step = 0;
-        int current_id;
+        int current_id = 0;
         while (valid_step < self->step)
         {
             current_id = (index + current_step) % size;
@@ -74,35 +71,36 @@ int josephus_get_result(Josephus *self, Person *result)
             }
             current_step++;
         }
+
         nums[current_id] = 0;
-        result[i] = self->people[current_id];
+        result[i] = *(person_array_get(self->people, current_id));
         index = (current_id + 1) % size;
     }
     return SUCCESS;
 }
 
-int josephus_append(Josephus* self, Person someone)
+int josephus_append(Josephus self, Person someone)
 {
-    if(self->number == MAX)
+    if(person_array_size(self->people) == MAX)
     {
         return FALSE;
     }
-    self->people[self->number] = someone;
-    self->number ++;
+    person_array_push_back(self->people, someone);
     return SUCCESS;
 }
 
-int josephus_pop(Josephus* self, int index)
+int josephus_pop(Josephus self, int index)
 {
-    if(index >= self->number || index < 0)
+    if(index >= person_array_size(self->people) || index < 0)
     {
         return FALSE;
     }
 
-    for(int i = index; i < self->number - 1; i++)
-    {
-        self->people[i] = self->people[i+1];
-    }
-    self->number --;
+    person_array_pop_at(NULL, self->people, index);
     return SUCCESS;
+}
+
+int josephus_size(Josephus self)
+{
+    return person_array_size(self->people);
 }

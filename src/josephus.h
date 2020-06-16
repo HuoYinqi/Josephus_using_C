@@ -2,25 +2,22 @@
 #define JOSEPHUS_H
 
 #include "person.h"
+#include "m-array.h"
 
-typedef struct Josephus
-{
-    int start;
-    int step;
-    int number;
-    Person *people;
-} Josephus;
+ARRAY_DEF(person_array, Person, M_POD_OPLIST)
 
-int josephus_new(Josephus *self, int start, int step, int number);
+typedef struct Josephus *Josephus;
 
-void josephus_destroy(Josephus* self);
+int josephus_new(Josephus self, int start, int step);
 
-int josephus_put_people(Josephus *self, Person *people);
+void josephus_destroy(Josephus self);
 
-int josephus_get_result(Josephus *self, Person *result);
+int josephus_get_result(Josephus self, Person *result);
 
-int josephus_append(Josephus*, Person);
+int josephus_append(Josephus, Person);
 
-int josephus_pop(Josephus*, int index);
+int josephus_pop(Josephus, int index);
+
+int josephus_size(Josephus);
 
 #endif
