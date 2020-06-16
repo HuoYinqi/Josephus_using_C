@@ -8,26 +8,44 @@
 #define FALSE 0
 #define OPEN_FILE_FAILED -1
 
-int create_people_from_file(char* path, int* line, Person *people)
-{   
-    int i = 0;
-    char buff[255];
-    FILE *fp = fopen(path, "r");
+struct Reader
+{
+    char path[100];
+    string_array_t  content; 
+};
 
+void reader_init(Reader self, char* path)
+{
+    strcpy(self->path, path);
+    string_array_init(self->content);
+}
+
+void reader_destroy(Reader self)
+{
+    string_array_clear(self->content);
+}
+
+int reader_read_file(Reader self)
+{
+    FILE *fp = fopen(self->path, "r");
     if(fp == NULL)
     {
         return OPEN_FILE_FAILED;
     }
 
-    while(fgets(buff, 256, fp) != NULL)
+    string_t line;
+    string_init(line);
+    while(string_fgets(line, fp, STRING_READ_PURE_LINE))
     {
-        if(person_create_from_string(buff, people + i) == 0)
-        {
-            return FALSE;
-        }
-        i++;
+        string_array_push_back(self->content, line); 
     }
-    *line = i;
+
+    string_clear(line);
     fclose(fp);
     return SUCCESS;
+}
+
+int reader_get_content(Reader self, string_array_t content)
+{
+    string_array_set(content, self->content);
 }
