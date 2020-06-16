@@ -7,17 +7,24 @@
 #define SUCCESS 1
 #define FALSE 0
 
-void person_new(Person* self)
+struct Person{
+    char *name;
+    int age;
+};
+
+void person_new(Person self)
 {
+    // self = malloc(100);  why???
     self->name = malloc(20);
 }
 
-void person_destroy(Person *self)
+void person_destroy(Person self)
 {
     free(self->name);
+    // free(self);
 }
 
-int person_init(Person* self, char *name, int age)
+int person_init(Person self, char *name, int age)
 {
     strcpy(self->name, name);
     if(age < 1 || age > 100)
@@ -28,7 +35,7 @@ int person_init(Person* self, char *name, int age)
     return SUCCESS;
 }
 
-int person_get_info(Person *self, char *info)
+int person_get_info(Person self, char *info)
 {
     char name[10];
     char age[10];
@@ -37,10 +44,10 @@ int person_get_info(Person *self, char *info)
     strcat(info, "\tage: ");
     itoa(self->age, age, 10);
     strcat(info, age);
-    return SUCCESS;
+    return SUCCESS; 
 }
 
-int person_create_from_string(char *s, Person *self)
+int person_create_from_string(const char *s, Person self)
 {
     char age[4];
     int split_index;
