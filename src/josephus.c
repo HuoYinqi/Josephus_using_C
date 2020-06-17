@@ -1,15 +1,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
 #include "josephus.h"
 #include "person.h"
 
 #define MAX 100
-#define SUCCESS 1
-#define FALSE 0
+#define SUCCESS 0
+
 #define INVALID_START -1
 #define INVALID_STEP -2
 #define INVALID_NUMBER -3
+#define APPEND_FIALED -4
+#define INVALID_INDEX -5
 
 struct Josephus
 {
@@ -18,33 +21,66 @@ struct Josephus
     person_array_t people;
 };
 
-int josephus_new(Josephus self, int start, int step)
+Josephus josephus_create(void)
+{
+    Josephus self = malloc(sizeof(struct Josephus));
+    return self;
+}
+
+void josephus_init(Josephus self)
+{
+    person_array_init(self->people);
+}
+
+void josephus_destroy(Josephus self)
+{
+    for(int i = 0; i < josephus_size(self); i++)
+    {
+        person_destroy(*(person_array_get_at(self->people, i)));
+    } //??
+
+    person_array_clear(self->people);
+    free(self);
+}
+
+int josephus_set(Josephus self, int start, int step)
 {
     if(start < 1)
     {
         return INVALID_START;
     }
     
-    else if (step < 1)
+    if (step < 1)
     {
         return INVALID_STEP; 
     }
 
     self->start = start;
     self->step = step;
-    person_array_init(self->people);
     
     return SUCCESS;
 }
 
-void josephus_destroy(Josephus self)
+int josephus_set_start(Josephus self, int start)
 {
-    person_array_clear(self->people);
-    for(int i = 0; i < josephus_size(self); i++)
+    if(start < 1)
     {
-        free(*(person_array_get_at(self->people, i)));
-        person_destroy(*(person_array_get_at(self->people, i)));
+        return INVALID_START;
     }
+    self->start = start;
+
+    return SUCCESS;
+}
+
+int josephus_set_step(Josephus self, int step)
+{
+    if (step < 1)
+    {
+        return INVALID_STEP; 
+    }
+    self->step = step;
+
+    return SUCCESS;
 }
 
 int josephus_get_result(Josephus self, Person *result)
@@ -83,9 +119,11 @@ int josephus_append(Josephus self, Person someone)
 {
     if(person_array_size(self->people) == MAX)
     {
-        return FALSE;
+        return APPEND_FIALED;
     }
+
     person_array_push_back(self->people, someone);
+
     return SUCCESS;
 }
 
@@ -93,10 +131,12 @@ int josephus_pop(Josephus self, int index)
 {
     if(index >= person_array_size(self->people) || index < 0)
     {
-        return FALSE;
+        return INVALID_INDEX;
     }
 
+    person_destroy(*(person_array_get_at(self->people, index)));
     person_array_pop_at(NULL, self->people, index);
+
     return SUCCESS;
 }
 

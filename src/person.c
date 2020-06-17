@@ -4,50 +4,70 @@
 
 #include "person.h"
 
-#define SUCCESS 1
-#define FALSE 0
+#define SUCCESS 0
+#define INVALID_AGE -1
+#define INVALID_STRING -2
 
 struct Person{
     char *name;
     int age;
 };
 
-void person_new(Person self)
+Person person_create(void)
 {
-    // self = malloc(100);  why???
+    Person self = malloc(sizeof(struct Person));
+    return self;
+}
+
+void person_init(Person self)
+{
     self->name = malloc(20);
 }
 
 void person_destroy(Person self)
 {
     free(self->name);
-    // free(self);
+    free(self);
 }
 
-int person_init(Person self, char *name, int age)
+int person_set(Person self, const char *name, int age)
 {
     strcpy(self->name, name);
     if(age < 1 || age > 100)
     {   
-        return FALSE;
+        return INVALID_AGE;
     }
     self->age = age;
     return SUCCESS;
 }
 
-int person_get_info(Person self, char *info)
+int person_set_name(Person self, const char *name)
 {
-    char name[10];
-    char age[10];
-    strcpy(info, "name: ");
-    strcat(info, self->name);
-    strcat(info, "\tage: ");
-    itoa(self->age, age, 10);
-    strcat(info, age);
-    return SUCCESS; 
+    strcpy(self->name, name);
+    return SUCCESS;
 }
 
-int person_create_from_string(const char *s, Person self)
+int person_set_age(Person self, int age)
+{
+    if(age < 1 || age > 100)
+    {   
+        return INVALID_AGE;
+    }
+    self->age = age;
+    return SUCCESS;
+}
+
+int person_get_age(Person self)
+{
+    return self->age;
+}
+
+char* person_get_name(Person self)
+{
+    return self->name;
+}
+
+int person_set_from_string(const char *s, Person self)
 {
     char age[4];
     int split_index;
@@ -60,7 +80,7 @@ int person_create_from_string(const char *s, Person self)
         }
         if (i == strlen(s))
         {
-            return FALSE;
+            return INVALID_STRING;
         }
     }
     for (int i = 0; i < split_index; i++)
@@ -73,5 +93,11 @@ int person_create_from_string(const char *s, Person self)
         age[i] = s[i + split_index + 1];
     }
     self->age = atoi(age);
+
+    if(self->age < 1 || self->age > 100)
+    {   
+        return INVALID_AGE;
+    }
+
     return SUCCESS;
 }

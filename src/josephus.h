@@ -8,11 +8,19 @@ ARRAY_DEF(person_array, Person, M_POD_OPLIST)
 
 typedef struct Josephus *Josephus;
 
-int josephus_new(Josephus self, int start, int step);
+Josephus josephus_create(void);
 
-void josephus_destroy(Josephus self);
+void josephus_init(Josephus);
 
-int josephus_get_result(Josephus self, Person *result);
+void josephus_destroy(Josephus);
+
+int josephus_set(Josephus, int start, int step);
+
+int josephus_set_start(Josephus, int start);
+
+int josephus_set_step(Josephus, int step);
+
+int josephus_get_result(Josephus, Person *result);
 
 int josephus_append(Josephus, Person);
 
