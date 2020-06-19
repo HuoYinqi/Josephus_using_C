@@ -28,12 +28,13 @@ void person_destroy(Person self)
 
 int person_set(Person self, const char *name, int age)
 {
-    strcpy(self->name, name);
     if(age < 1 || age > 100)
     {   
         return INVALID_AGE;
     }
     self->age = age;
+    strcpy(self->name, name);
+    
     return SUCCESS;
 }
 

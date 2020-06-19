@@ -29,7 +29,7 @@ void josephus_destroy(Josephus self)
     for(int i = 0; i < josephus_size(self); i++)
     {
         person_destroy(*(person_array_get_at(self->people, i)));
-    } //??
+    } 
 
     person_array_clear(self->people);
     free(self);
@@ -37,14 +37,9 @@ void josephus_destroy(Josephus self)
 
 int josephus_set(Josephus self, int start, int step)
 {
-    if(start < 1)
+    if(start < 1 || step < 1)
     {
         return INVALID_VALUE;
-    }
-    
-    if (step < 1)
-    {
-        return INVALID_VALUE; 
     }
 
     self->start = start;
@@ -90,6 +85,7 @@ int josephus_get_result(Josephus self, Person *result)
         int valid_step = 0;
         int current_step = 0;
         int current_id = 0;
+
         while (valid_step < self->step)
         {
             current_id = (index + current_step) % size;

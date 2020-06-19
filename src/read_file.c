@@ -17,6 +17,7 @@ Reader reader_create(void)
 {
     Reader self = malloc(sizeof(struct Reader));
     string_array_init(self->content);
+    
     return self;
 }
 
