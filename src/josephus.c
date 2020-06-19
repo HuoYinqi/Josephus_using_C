@@ -7,12 +7,8 @@
 
 #define MAX 100
 #define SUCCESS 0
-
-#define INVALID_START -1
-#define INVALID_STEP -2
-#define INVALID_NUMBER -3
-#define APPEND_FIALED -4
-#define INVALID_INDEX -5
+#define INVALID_VALUE -1
+#define APPEND_FIALED -2
 
 struct Josephus
 {
@@ -47,12 +43,12 @@ int josephus_set(Josephus self, int start, int step)
 {
     if(start < 1)
     {
-        return INVALID_START;
+        return INVALID_VALUE;
     }
     
     if (step < 1)
     {
-        return INVALID_STEP; 
+        return INVALID_VALUE; 
     }
 
     self->start = start;
@@ -65,7 +61,7 @@ int josephus_set_start(Josephus self, int start)
 {
     if(start < 1)
     {
-        return INVALID_START;
+        return INVALID_VALUE;
     }
     self->start = start;
 
@@ -76,7 +72,7 @@ int josephus_set_step(Josephus self, int step)
 {
     if (step < 1)
     {
-        return INVALID_STEP; 
+        return INVALID_VALUE; 
     }
     self->step = step;
 
@@ -131,7 +127,7 @@ int josephus_pop(Josephus self, int index)
 {
     if(index >= person_array_size(self->people) || index < 0)
     {
-        return INVALID_INDEX;
+        return INVALID_VALUE;
     }
 
     person_destroy(*(person_array_get_at(self->people, index)));
