@@ -8,7 +8,11 @@ ARRAY_DEF(string_array, string_t);
 
 typedef struct Reader* Reader;
 
-void reader_init(Reader, char *path);
+Reader reader_create(void);
+
+void reader_init(Reader);
+
+void reader_set(Reader, char* path);
 
 void reader_destroy(Reader);
 

@@ -4,8 +4,7 @@
 
 #include "read_file.h"
 
-#define SUCCESS 1
-#define FALSE 0
+#define SUCCESS 0
 #define OPEN_FILE_FAILED -1
 
 struct Reader
@@ -14,15 +13,26 @@ struct Reader
     string_array_t  content; 
 };
 
-void reader_init(Reader self, char* path)
+Reader reader_create(void)
+{
+    Reader self = malloc(sizeof(struct Reader));
+    return self;
+}
+
+void reader_init(Reader self)
+{
+    string_array_init(self->content);
+}
+
+void reader_set(Reader self, char* path)
 {
     strcpy(self->path, path);
-    string_array_init(self->content);
 }
 
 void reader_destroy(Reader self)
 {
     string_array_clear(self->content);
+    free(self);
 }
 
 int reader_read_file(Reader self)
