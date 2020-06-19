@@ -2,15 +2,13 @@
 #define JOSEPHUS_H
 
 #include "person.h"
-#include "m-array.h"
+#include "../lib/m-array.h"
 
 ARRAY_DEF(person_array, Person, M_POD_OPLIST)
 
 typedef struct Josephus *Josephus;
 
 Josephus josephus_create(void);
-
-void josephus_init(Josephus);
 
 void josephus_destroy(Josephus);
 

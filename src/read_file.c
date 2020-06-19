@@ -16,12 +16,8 @@ struct Reader
 Reader reader_create(void)
 {
     Reader self = malloc(sizeof(struct Reader));
-    return self;
-}
-
-void reader_init(Reader self)
-{
     string_array_init(self->content);
+    return self;
 }
 
 void reader_set(Reader self, char* path)

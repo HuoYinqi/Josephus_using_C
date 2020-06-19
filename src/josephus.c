@@ -20,12 +20,8 @@ struct Josephus
 Josephus josephus_create(void)
 {
     Josephus self = malloc(sizeof(struct Josephus));
-    return self;
-}
-
-void josephus_init(Josephus self)
-{
     person_array_init(self->people);
+    return self;
 }
 
 void josephus_destroy(Josephus self)

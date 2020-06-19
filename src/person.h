@@ -7,8 +7,6 @@ typedef struct Person* Person;
 
 Person person_create(void);
 
-void person_init(Person);
-
 void person_destroy(Person);
 
 int person_set(Person, const char *name, int age);

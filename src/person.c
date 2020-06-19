@@ -16,12 +16,8 @@ struct Person{
 Person person_create(void)
 {
     Person self = malloc(sizeof(struct Person));
-    return self;
-}
-
-void person_init(Person self)
-{
     self->name = malloc(20);
+    return self;
 }
 
 void person_destroy(Person self)
