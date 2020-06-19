@@ -72,34 +72,21 @@ int josephus_set_step(Josephus self, int step)
 
 int josephus_get_result(Josephus self, Person *result)
 {
-    int size = person_array_size(self->people);
-    int nums[MAX];
+    person_array_t temp;
+    person_array_init_set(temp, self->people);
+    
+    int size = person_array_size(temp);
+    int current_id = self->start - 1;
+
     for (int i = 0; i < size; i++)
     {
-        nums[i] = 1; 
-    }   
+        current_id = (current_id + self->step - 1) % person_array_size(temp);
 
-    int index = self->start - 1;
-    for (int i = 0; i < size; i++)
-    {
-        int valid_step = 0;
-        int current_step = 0;
-        int current_id = 0;
-
-        while (valid_step < self->step)
-        {
-            current_id = (index + current_step) % size;
-            if (nums[current_id] != 0)
-            {
-                valid_step++;
-            }
-            current_step++;
-        }
-
-        nums[current_id] = 0;
-        result[i] = *(person_array_get(self->people, current_id));
-        index = (current_id + 1) % size;
+        result[i] = *(person_array_get(temp, current_id));
+        person_array_pop_at(NULL, temp, current_id);
     }
+
+    person_array_clear(temp);
     return SUCCESS;
 }
 
