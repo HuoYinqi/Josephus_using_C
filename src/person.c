@@ -2,11 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "error.h"
 #include "person.h"
-
-#define SUCCESS 0
-#define INVALID_AGE -1
-#define INVALID_STRING -2
 
 struct Person{
     char *name;
@@ -16,7 +13,17 @@ struct Person{
 Person person_create(void)
 {
     Person self = malloc(sizeof(struct Person));
+    if(self == NULL)
+    {
+        return ALLOCATE_MEMORY_FAILED;
+    }
+
     self->name = malloc(20);
+    if(self->name == NULL)
+    {
+        return ALLOCATE_MEMORY_FAILED;
+    }  
+
     return self;
 }
 
@@ -26,11 +33,11 @@ void person_destroy(Person self)
     free(self);
 }
 
-int person_set(Person self, const char *name, int age)
+int person_init(Person self, const char *name, int age)
 {
     if(age < 1 || age > 100)
     {   
-        return INVALID_AGE;
+        return INVALID_ARGV;
     }
     self->age = age;
     strcpy(self->name, name);
@@ -48,7 +55,7 @@ int person_set_age(Person self, int age)
 {
     if(age < 1 || age > 100)
     {   
-        return INVALID_AGE;
+        return INVALID_ARGV;
     }
     self->age = age;
     return SUCCESS;
@@ -64,7 +71,7 @@ char* person_get_name(Person self)
     return self->name;
 }
 
-int person_set_from_string(const char *s, Person self)
+int person_set_from_string(Person self, const char *s)
 {
     char age[4];
     int split_index;
@@ -77,7 +84,7 @@ int person_set_from_string(const char *s, Person self)
         }
         if (i == strlen(s))
         {
-            return INVALID_STRING;
+            return INVALID_ARGV;
         }
     }
     for (int i = 0; i < split_index; i++)
@@ -93,7 +100,7 @@ int person_set_from_string(const char *s, Person self)
 
     if(self->age < 1 || self->age > 100)
     {   
-        return INVALID_AGE;
+        return INVALID_ARGV;
     }
 
     return SUCCESS;

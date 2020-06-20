@@ -2,13 +2,11 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "error.h"
 #include "josephus.h"
 #include "person.h"
 
-#define MAX 100
-#define SUCCESS 0
-#define INVALID_VALUE -1
-#define APPEND_FIALED -2
+ARRAY_DEF(person_array, Person, M_POD_OPLIST)
 
 struct Josephus
 {
@@ -20,7 +18,17 @@ struct Josephus
 Josephus josephus_create(void)
 {
     Josephus self = malloc(sizeof(struct Josephus));
+    if(self == NULL)
+    {
+        return ALLOCATE_MEMORY_FAILED;
+    }
+
     person_array_init(self->people);
+    if(self->people == NULL)
+    {
+        return ALLOCATE_MEMORY_FAILED;
+    }
+
     return self;
 }
 
@@ -35,11 +43,11 @@ void josephus_destroy(Josephus self)
     free(self);
 }
 
-int josephus_set(Josephus self, int start, int step)
+int josephus_init(Josephus self, int start, int step)
 {
     if(start < 1 || step < 1)
     {
-        return INVALID_VALUE;
+        return INVALID_ARGV;
     }
 
     self->start = start;
@@ -52,7 +60,7 @@ int josephus_set_start(Josephus self, int start)
 {
     if(start < 1)
     {
-        return INVALID_VALUE;
+        return INVALID_ARGV;
     }
     self->start = start;
 
@@ -63,7 +71,7 @@ int josephus_set_step(Josephus self, int step)
 {
     if (step < 1)
     {
-        return INVALID_VALUE; 
+        return INVALID_ARGV; 
     }
     self->step = step;
 
@@ -92,9 +100,9 @@ int josephus_get_result(Josephus self, Person *result)
 
 int josephus_append(Josephus self, Person someone)
 {
-    if(person_array_size(self->people) == MAX)
+    if(person_array_size(self->people) == JOSEPHUS_MAX_CAPACITY)
     {
-        return APPEND_FIALED;
+        return JOSEPHUS_APPEND_FAILED;
     }
 
     person_array_push_back(self->people, someone);
@@ -102,15 +110,14 @@ int josephus_append(Josephus self, Person someone)
     return SUCCESS;
 }
 
-int josephus_pop(Josephus self, int index)
+int josephus_pop(Josephus self, Person *someone, int index)
 {
     if(index >= person_array_size(self->people) || index < 0)
     {
-        return INVALID_VALUE;
+        return INVALID_ARGV;
     }
 
-    person_destroy(*(person_array_get_at(self->people, index)));
-    person_array_pop_at(NULL, self->people, index);
+    person_array_pop_at(someone, self->people, index);
 
     return SUCCESS;
 }
