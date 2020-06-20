@@ -1,5 +1,5 @@
 SHELL=cmd.exe
-OBJS=main.o person.o josephus.o read_file.o
+OBJS=main.o person.o josephus.o reader.o
 main: $(OBJS)
 		gcc -o main $(OBJS)
 main.o:
@@ -8,7 +8,7 @@ person.o:
 		gcc -c src/person.c
 josephus.o:
 		gcc -c src/josephus.c
-read_file.o:
-		gcc -c src/read_file.c
+reader.o:
+		gcc -c src/reader.c
 clean:
 		del $(OBJS)
