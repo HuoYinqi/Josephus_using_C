@@ -2,7 +2,6 @@
 #define __JOSEPHUS_H__
 
 #include "person.h"
-#include "../include/m-array.h"
 
 #define JOSEPHUS_MAX_CAPACITY 100
 #define JOSEPHUS_APPEND_FAILED -1

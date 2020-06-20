@@ -5,6 +5,7 @@
 #include "error.h"
 #include "josephus.h"
 #include "person.h"
+#include "../include/m-array.h"
 
 ARRAY_DEF(person_array, Person, M_POD_OPLIST)
 
