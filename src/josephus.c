@@ -46,7 +46,7 @@ void josephus_destroy(Josephus self)
 
 int josephus_init(Josephus self, int start, int step)
 {
-    if(start < 1 || step < 1)
+    if(start < JOSEPHUS_MIN_START || step < JOSEPHUS_MIN_STEP)
     {
         return INVALID_ARGV;
     }
@@ -79,8 +79,23 @@ int josephus_set_step(Josephus self, int step)
     return SUCCESS;
 }
 
+int josephus_get_start(Josephus self)
+{
+    return self->start;
+}
+
+int josephus_get_step(Josephus self)
+{
+    return self->step;
+}
+
 int josephus_get_result(Josephus self, Person *result)
 {
+    if(self->start >= josephus_size(self))
+    {
+        return INVALID_ARGV;
+    }
+
     person_array_t temp;
     person_array_init_set(temp, self->people);
     
@@ -126,4 +141,12 @@ int josephus_pop(Josephus self, Person *someone, int index)
 int josephus_size(Josephus self)
 {
     return person_array_size(self->people);
+}
+
+void josephus_get_people(Josephus self, Person *people)
+{
+    for(int i  = 0; i < person_array_size(self->people); i++)
+    {
+        people[i] = *(person_array_get_at(self->people, i));
+    }
 }

@@ -4,6 +4,8 @@
 #include "person.h"
 
 #define JOSEPHUS_MAX_CAPACITY 100
+#define JOSEPHUS_MIN_START 1
+#define JOSEPHUS_MIN_STEP 1
 #define JOSEPHUS_APPEND_FAILED -1
 
 typedef struct Josephus *Josephus;
@@ -18,6 +20,10 @@ int josephus_set_start(Josephus, int start);
 
 int josephus_set_step(Josephus, int step);
 
+int josephus_get_start(Josephus);
+
+int josephus_get_step(Josephus);
+
 int josephus_get_result(Josephus, Person *result);
 
 int josephus_append(Josephus, Person);
@@ -25,5 +31,7 @@ int josephus_append(Josephus, Person);
 int josephus_pop(Josephus, Person*, int index);
 
 int josephus_size(Josephus);
+
+void josephus_get_people(Josephus, Person* people);
 
 #endif
