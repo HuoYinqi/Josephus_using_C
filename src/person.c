@@ -35,7 +35,7 @@ void person_destroy(Person self)
 
 int person_init(Person self, const char *name, int age)
 {
-    if(age < 1 || age > 100)
+    if(age < PERSON_AGE_LOW_BOUND || age > PERSON_AGE_UP_BOUND)
     {   
         return INVALID_ARGV;
     }
@@ -53,7 +53,7 @@ int person_set_name(Person self, const char *name)
 
 int person_set_age(Person self, int age)
 {
-    if(age < 1 || age > 100)
+    if(age < PERSON_AGE_LOW_BOUND || age > PERSON_AGE_UP_BOUND)
     {   
         return INVALID_ARGV;
     }
@@ -71,7 +71,7 @@ char* person_get_name(Person self)
     return self->name;
 }
 
-int person_set_from_string(Person self, const char *s)
+int person_set_from_reader(Person self, const char *s)
 {
     char age[4];
     int split_index;
@@ -82,7 +82,7 @@ int person_set_from_string(Person self, const char *s)
             split_index = i;
             break;
         }
-        if (i == strlen(s))
+        if (i == strlen(s) - 1)
         {
             return INVALID_ARGV;
         }
@@ -98,10 +98,20 @@ int person_set_from_string(Person self, const char *s)
     }
     self->age = atoi(age);
 
-    if(self->age < 1 || self->age > 100)
+    if(self->age < PERSON_AGE_LOW_BOUND || self->age > PERSON_AGE_UP_BOUND)
     {   
         return INVALID_ARGV;
     }
 
     return SUCCESS;
+}
+
+int person_equal(Person p1, Person p2)
+{
+    if(p1->age == p2->age && !strcmp(p1->name, p2->name))
+    {
+        return TRUE;
+    }
+
+    else return FALSE;
 }
